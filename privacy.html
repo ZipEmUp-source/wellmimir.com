@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Privacy · Mimir</title>
+  <meta name="description" content="What Mimir keeps, where it keeps it, and who can see it.">
+  <meta name="theme-color" content="#090d13">
+  <link rel="canonical" href="https://wellmimir.com/privacy.html">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="logo" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="28" fill="none" stroke="#d9ad5c" stroke-width="2.4"/>
+        <circle cx="32" cy="32" r="24" fill="none" stroke="#d9ad5c" stroke-width="0.8" stroke-opacity="0.5"/>
+        <path d="M11 32 Q 32 15 53 32 Q 32 49 11 32 Z" fill="#53d6c2" fill-opacity="0.06" stroke="#d9ad5c" stroke-width="2" stroke-linejoin="round"/>
+        <circle cx="32" cy="32" r="9" fill="#53d6c2" fill-opacity="0.14" stroke="#53d6c2" stroke-width="1.6" stroke-opacity="0.9"/>
+        <circle cx="32" cy="32" r="3.8" fill="#53d6c2"><animate attributeName="opacity" values="0.75;1;0.75" dur="3.2s" repeatCount="indefinite"/></circle>
+        <path d="M32 1.5v6M32 56.5v6M1.5 32h6M56.5 32h6" fill="none" stroke="#d9ad5c" stroke-width="2" stroke-linecap="round"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <header class="site-header is-solid">
+    <nav class="nav wrap" aria-label="Main">
+      <a class="brand" href="/" aria-label="Mimir home">
+        <svg class="logo" aria-hidden="true"><use href="#logo"/></svg>
+        <span class="brand-name">MIMIR</span>
+      </a>
+      <a class="btn btn-gold btn-small" style="margin-left:auto" href="/#download">Download</a>
+    </nav>
+  </header>
+
+  <main id="main" class="page">
+    <article class="prose wrap">
+      <span class="eyebrow">Privacy</span>
+      <h1>What Mimir keeps, and who can see it</h1>
+      <p class="updated">Last updated September 30, 2026</p>
+      <p>Mimir is a desktop app. Almost everything it knows about you stays on your computer. This page says what leaves it, where it goes, and why.</p>
+
+      <h2>On your computer</h2>
+      <ul>
+        <li>Your chats, memory notes, skill notes and settings live in your Mimir workspace, a folder on your computer.</li>
+        <li>API keys you give Mimir are sealed by Windows or by the macOS Keychain. They are never kept in plain text.</li>
+        <li>Mimir's error logs stay on your computer. Mimir has no ads and no analytics, and sends no tracking data anywhere.</li>
+      </ul>
+
+      <h2>Your AI provider</h2>
+      <ul>
+        <li>When you chat, your messages go from your computer straight to the AI provider you chose: Anthropic, OpenAI, DeepSeek, OpenRouter, a model running on your own machine, or another service you set up. That provider's own privacy terms cover what it receives.</li>
+        <li>With a Claude or ChatGPT plan, Mimir works through the official Claude Code or Codex app on your computer, and signs in only through them.</li>
+        <li>If you turn on ElevenLabs voices, the text to be spoken goes to ElevenLabs.</li>
+        <li>We do not receive your messages.</li>
+      </ul>
+
+      <h2>Updates and model facts</h2>
+      <ul>
+        <li>A few seconds after it starts, and every six hours after that, Mimir asks GitHub whether a newer version is out. Updates download from GitHub.</li>
+        <li>Mimir asks the providers you connected which models they offer, and reads public facts about models (names, limits, prices) from models.dev.</li>
+        <li>Like any web request, these show the other end your IP address.</li>
+      </ul>
+
+      <h2>Your Mimir account</h2>
+      <p>From the next update, Mimir asks for an account the first time it opens, so your chats can follow you between computers. The account service keeps:</p>
+      <ul>
+        <li>your email address, to send you sign-in codes;</li>
+        <li>sealed copies of your chats, memory notes and skill notes, with their sizes and how many there are;</li>
+        <li>the names of your computers while one is asking to be let in, and when it asked.</li>
+      </ul>
+      <p>Everything that syncs is sealed on your computer, with a key only your computers hold, before it leaves. The account service stores it and cannot read it. Nobody who runs the service can read your chats, your memory, your file names or your keys, and nobody there can open your vault for you.</p>
+      <p>The account service runs on Supabase, in the United States. Sign-in codes are emailed through Resend.</p>
+      <p>Deleting your account, in Settings under Account, removes it and everything it holds from the service. The copies on your own computers stay until you delete them.</p>
+
+      <h2>This website</h2>
+      <ul>
+        <li>wellmimir.com is a static page hosted on GitHub Pages. It sets no cookies.</li>
+        <li>Its fonts load from Google Fonts, and it asks GitHub for the latest release so the download buttons point at the right files. GitHub and Google see those requests as any web server would.</li>
+      </ul>
+
+      <h2>Questions</h2>
+      <p>Ask anything about this page by opening an issue on <a href="https://github.com/ZipEmUp-source/Mimir-releases/issues">GitHub</a>.</p>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-row">
+        <a class="brand" href="/">
+          <svg class="logo" aria-hidden="true"><use href="#logo"/></svg>
+          <span class="brand-name">MIMIR</span>
+        </a>
+        <ul class="footer-links">
+          <li><a href="/#download">Download</a></li>
+          <li><a href="https://github.com/ZipEmUp-source/Mimir-releases">GitHub</a></li>
+          <li><a href="https://github.com/ZipEmUp-source/Mimir-releases/issues">Report a bug</a></li>
+        </ul>
+      </div>
+      <p class="fine">© 2026 Mimir.</p>
+    </div>
+  </footer>
+</body>
+</html>

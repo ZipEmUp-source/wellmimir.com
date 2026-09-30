@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mimir · The Well remembers</title>
+  <meta name="description" content="Mimir is a free AI agent for Windows and Mac. Use the Claude or ChatGPT plan you already have, or an API key. Mimir reads, writes, runs and remembers, and asks before it touches your computer.">
+  <meta name="theme-color" content="#090d13">
+  <link rel="canonical" href="https://wellmimir.com/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mimir">
+  <meta property="og:title" content="Mimir · The Well remembers">
+  <meta property="og:description" content="A free AI agent for Windows and Mac that reads, writes, runs and remembers, and asks before it touches your computer.">
+  <meta property="og:url" content="https://wellmimir.com/">
+  <meta property="og:image" content="https://wellmimir.com/assets/img/og-card.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Mimir's golden eye with the words: Mimir, the Well remembers.">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Inter:wght@400;500;600&display=swap">
+  <link rel="preload" as="image" href="/assets/img/well-1280.webp" imagesrcset="/assets/img/well-800.webp 800w, /assets/img/well-1280.webp 1280w, /assets/img/well-1792.webp 1792w" imagesizes="100vw">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="logo" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="28" fill="none" stroke="#d9ad5c" stroke-width="2.4"/>
+        <circle cx="32" cy="32" r="24" fill="none" stroke="#d9ad5c" stroke-width="0.8" stroke-opacity="0.5"/>
+        <path d="M11 32 Q 32 15 53 32 Q 32 49 11 32 Z" fill="#53d6c2" fill-opacity="0.06" stroke="#d9ad5c" stroke-width="2" stroke-linejoin="round"/>
+        <circle cx="32" cy="32" r="9" fill="#53d6c2" fill-opacity="0.14" stroke="#53d6c2" stroke-width="1.6" stroke-opacity="0.9"/>
+        <circle cx="32" cy="32" r="3.8" fill="#53d6c2"><animate attributeName="opacity" values="0.75;1;0.75" dur="3.2s" repeatCount="indefinite"/></circle>
+        <path d="M32 1.5v6M32 56.5v6M1.5 32h6M56.5 32h6" fill="none" stroke="#d9ad5c" stroke-width="2" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="i-windows" viewBox="0 0 24 24"><path fill="currentColor" d="M3 5.1 10.4 4v7.1H3V5.1Zm0 13.8V12.9h7.4V20L3 18.9Zm8.4 1.2v-7.2H21V21l-9.6-.9Zm0-9V3.9L21 3v8.1h-9.6Z"/></symbol>
+      <symbol id="i-apple" viewBox="0 0 24 24"><path fill="currentColor" d="M16.4 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.2-2.8.8-3.5.8-.7 0-1.9-.8-3.1-.8-1.6 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3.1.7c1.3 0 2.1-1.1 2.8-2.3.9-1.3 1.3-2.6 1.3-2.6s-2.5-1-2.5-3.7ZM14.2 5.8c.6-.8 1.1-1.9 1-3-.9 0-2.1.6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2.1-.5 2.7-1.3Z"/></symbol>
+      <symbol id="i-down" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0 4.5-4.5M12 15l-4.5-4.5M5 19h14"/></symbol>
+    </defs>
+  </svg>
+
+  <header class="site-header" id="top">
+    <nav class="nav wrap" aria-label="Main">
+      <a class="brand" href="#top" aria-label="Mimir, back to top">
+        <svg class="logo" aria-hidden="true"><use href="#logo"/></svg>
+        <span class="brand-name">MIMIR</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span></button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#ward">The Ward</a></li>
+        <li><a href="#accounts">Accounts</a></li>
+        <li><a href="#faq">Questions</a></li>
+      </ul>
+      <a class="btn btn-gold btn-small btn-nav" href="#download">
+        <svg aria-hidden="true"><use href="#i-down"/></svg>Download
+      </a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <picture class="hero-art">
+        <source type="image/webp" srcset="/assets/img/well-800.webp 800w, /assets/img/well-1280.webp 1280w, /assets/img/well-1792.webp 1792w" sizes="100vw">
+        <img src="/assets/img/well-1792.jpg" alt="" width="1792" height="1024" fetchpriority="high" decoding="async">
+      </picture>
+      <div class="iris-glow" aria-hidden="true"></div>
+      <div class="iris-ring" aria-hidden="true">
+        <svg viewBox="0 0 64 64" id="rune-ring"></svg>
+      </div>
+
+      <div class="hero-content wrap">
+        <span class="eyebrow">Keeper of the Well</span>
+        <h1 id="hero-title">The Well remembers.</h1>
+        <p class="lede">Mimir is an AI agent for your desktop. It reads, writes, runs and remembers, with the AI you already use, and it asks before it touches anything that matters.</p>
+        <div class="hero-actions">
+          <a class="btn btn-gold btn-large" href="#download" data-primary-download>
+            <svg aria-hidden="true"><use href="#i-down"/></svg><span data-primary-label>Download Mimir</span>
+          </a>
+          <a class="btn btn-ghost btn-large" href="#features">See what it does</a>
+        </div>
+        <p class="hero-meta">Free · Windows &amp; macOS · <span data-release-short>Latest release on GitHub</span></p>
+      </div>
+      <a class="scroll-cue" href="#features" aria-label="Scroll to features"></a>
+    </section>
+
+    <section class="providers" aria-label="AI you can use">
+      <div class="wrap">
+        <p>Bring the AI you already have</p>
+        <ul class="chips">
+          <li><span class="dot gold"></span><b>Claude</b> plan or API key</li>
+          <li><span class="dot gold"></span><b>ChatGPT</b> plan through Codex</li>
+          <li><span class="dot"></span><b>OpenAI</b> API</li>
+          <li><span class="dot"></span><b>DeepSeek</b></li>
+          <li><span class="dot"></span><b>Ollama</b> and local models</li>
+          <li><span class="dot"></span><b>OpenRouter</b>, Groq, xAI</li>
+          <li><span class="dot"></span><b>Any</b> OpenAI-compatible server</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section glow-a" id="features" aria-labelledby="features-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">What Mimir does</span>
+          <h2 id="features-title">Wisdom that does the work</h2>
+          <p>Most AI chat windows only talk. Mimir works on your computer, carefully, and keeps what it learns.</p>
+        </div>
+
+        <div class="cards">
+          <article class="card reveal">
+            <div class="rune" aria-hidden="true">ᚦ</div>
+            <span class="kicker">The agent</span>
+            <h3>It does the work</h3>
+            <p>Mimir reads and writes files, searches your workspace, runs commands and sends out helper agents for the big jobs. Change its course while it runs, without starting over.</p>
+          </article>
+          <article class="card reveal d1">
+            <div class="rune" aria-hidden="true">ᛉ</div>
+            <span class="kicker">Safety</span>
+            <h3>The Ward</h3>
+            <p>Every command, every look at your screen and every click on your desktop stops at a real system dialog that defaults to No. Your API keys stay locked by Windows or the macOS Keychain.</p>
+          </article>
+          <article class="card reveal d2">
+            <div class="rune" aria-hidden="true">ᛚ</div>
+            <span class="kicker">Memory</span>
+            <h3>Memory, in plain sight</h3>
+            <p>Mimir keeps the lessons worth keeping as plain notes you can open, edit or delete. Nothing hidden, and nothing you cannot take with you.</p>
+          </article>
+          <article class="card reveal">
+            <div class="rune" aria-hidden="true">ᛖ</div>
+            <span class="kicker">Many minds</span>
+            <h3>The Mirrors</h3>
+            <p>Seat Codex, Kimi or any agent you run at Mimir's table. Name them in a message and they answer in rounds, and answer each other.</p>
+          </article>
+          <article class="card reveal d1">
+            <div class="rune" aria-hidden="true">ᚨ</div>
+            <span class="kicker">Updates</span>
+            <h3>Tidings</h3>
+            <p>Mimir hears of new versions by itself and shows you what changed. One click installs the update, checked against a signing key built into the app.</p>
+          </article>
+          <article class="card reveal d2">
+            <div class="rune" aria-hidden="true">ᚠ</div>
+            <span class="kicker">The wallet</span>
+            <h3>Every token counted</h3>
+            <p>See what each chat and each model costs as you go. A running ledger covers your API keys and your plans alike.</p>
+          </article>
+        </div>
+
+        <ul class="extras reveal" aria-label="And more">
+          <li>New models seat themselves</li>
+          <li>Voice in and out</li>
+          <li>Four Norse themes</li>
+          <li>An artifacts gallery</li>
+          <li>Commands in a Linux sandbox on Windows</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="rune-rule" aria-hidden="true">ᚠᚢᚦᚨᚱᚲ</div>
+
+    <section class="section glow-b" aria-labelledby="look-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">A look inside</span>
+          <h2 id="look-title">A hall, not a chat box</h2>
+          <p>Real screens from Mimir on Windows. The eye behind the chat never closes.</p>
+        </div>
+        <div class="showcase">
+          <figure class="shot reveal">
+            <img src="/assets/img/shot-stage-1600.webp" srcset="/assets/img/shot-stage-960.webp 960w, /assets/img/shot-stage-1600.webp 1600w" sizes="(max-width: 1020px) 100vw, 680px" width="1600" height="1024" loading="lazy" decoding="async" alt="Mimir's main window: a list of sessions on the left, a golden eye filling the middle with the words The Well is still, and a message box at the bottom.">
+            <figcaption><b>The Well.</b> Your sessions on the left, Mimir in the middle, the model and its context always in view.</figcaption>
+          </figure>
+          <div class="showcase-side">
+            <figure class="shot reveal d1">
+              <img src="/assets/img/shot-mirrors-1100.webp" srcset="/assets/img/shot-mirrors-700.webp 700w, /assets/img/shot-mirrors-1100.webp 1100w" sizes="(max-width: 1020px) 100vw, 460px" width="1100" height="1028" loading="lazy" decoding="async" alt="The Mirrors panel with Codex, Kimi and dsh as reflections, each with its own rune and colour, and a box to ask them.">
+              <figcaption><b>The Mirrors.</b> Other agents, each with a face and a voice, ready to take a seat.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="ward" aria-labelledby="ward-title">
+      <div class="wrap ward">
+        <div class="reveal">
+          <span class="eyebrow">The Ward</span>
+          <h2 id="ward-title">It asks before it acts</h2>
+          <p>An AI that can run commands should never do it behind your back. Before Mimir runs a command, looks at your screen or moves your mouse, it stops at your operating system's own dialog, and the answer is No until you say Yes.</p>
+          <ul class="ticks">
+            <li>The dialog belongs to Windows or macOS, not to a web page, and No is the default.</li>
+            <li>Turn a switch on once, and Mimir stops asking for that kind of action. Every switch starts off.</li>
+            <li>API keys are sealed by Windows or the macOS Keychain, never kept in plain text.</li>
+            <li>Your deny-list always wins, even when Mimir works on its own.</li>
+          </ul>
+        </div>
+        <div class="ward-art reveal d1">
+          <figure class="shot ward-shot">
+            <img src="/assets/img/shot-ward-900.webp" srcset="/assets/img/shot-ward-600.webp 600w, /assets/img/shot-ward-900.webp 900w" sizes="(max-width: 860px) 100vw, 520px" width="900" height="995" loading="lazy" decoding="async" alt="Mimir's Permissions settings: autonomous work, file writes, shell commands, web access, screen sight and desktop control, each switched off and each asking first.">
+          </figure>
+          <div class="dialog-mock" role="img" aria-label="A Windows dialog titled Mimir, permission required, asking: Allow this action on your computer? It shows the command npm run build, and has Yes and No buttons, with No as the default.">
+            <div class="bar"><span>Mimir — permission required</span><span aria-hidden="true">✕</span></div>
+            <div class="body">
+              <svg class="warn" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2L17 3Z" fill="#ffcc4d" stroke="#d99a00" stroke-width="1.5" stroke-linejoin="round"/><path d="M17 12v9" stroke="#1b1b1b" stroke-width="2.6" stroke-linecap="round"/><circle cx="17" cy="25.5" r="1.7" fill="#1b1b1b"/></svg>
+              <div>
+                Allow this action on your computer?
+                <code class="cmd">Run a command: npm run build</code>
+                <span style="display:block;margin-top:8px">This runs with your account's access. Choose No if you did not request it.</span>
+              </div>
+            </div>
+            <div class="buttons"><span>Yes</span><span class="default">No</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section glow-a" id="accounts" aria-labelledby="accounts-title">
+      <div class="wrap accounts">
+        <div class="reveal">
+          <span class="badge">Arrives in the next update</span>
+          <h2 id="accounts-title">Your chats, on every computer</h2>
+          <p>Sign in once and your chats, memory and skill notes follow you between Windows and Mac. Everything already on your computer stays right where it is.</p>
+          <ol class="steps">
+            <li><span><b>No password.</b> Type your email, then the eight-digit code Mimir sends you.</span></li>
+            <li><span><b>Locked before it leaves.</b> Everything is sealed on your computer with a key only your computers hold. The account service carries it and cannot read a word.</span></li>
+            <li><span><b>A new computer is let in by one you already use.</b> It shows a code, and you type that code where you are already signed in.</span></li>
+            <li><span><b>A recovery key</b> for the rare day when none of your computers is at hand.</span></li>
+          </ol>
+        </div>
+        <figure class="shot reveal d1">
+          <img src="/assets/img/shot-account-942.webp" srcset="/assets/img/shot-account-640.webp 640w, /assets/img/shot-account-942.webp 942w" sizes="(max-width: 860px) 100vw, 540px" width="942" height="735" loading="lazy" decoding="async" alt="Mimir's account step: Make your Mimir account, with an email box and an Email me a code button.">
+          <figcaption><b>The account step.</b> Your email, then a code. That is the whole sign-up.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="download" aria-labelledby="download-title">
+      <div class="wrap">
+        <div class="download-panel reveal">
+          <div class="download-top">
+            <img src="/assets/img/eye-256.png" width="96" height="96" alt="">
+            <div>
+              <h2 id="download-title">Get Mimir</h2>
+              <p>Free for Windows and Mac. Sign in with your Claude or ChatGPT plan, or paste an API key.</p>
+            </div>
+          </div>
+
+          <div class="platforms">
+            <a class="platform" data-asset="windows" href="https://github.com/ZipEmUp-source/Mimir-releases/releases/latest">
+              <svg aria-hidden="true"><use href="#i-windows"/></svg>
+              <b>Windows</b>
+              <small data-size>Windows 10 and 11 · installer</small>
+            </a>
+            <a class="platform" data-asset="mac-arm" href="https://github.com/ZipEmUp-source/Mimir-releases/releases/latest">
+              <svg aria-hidden="true"><use href="#i-apple"/></svg>
+              <b>Mac with Apple silicon</b>
+              <small data-size>M1 and newer · .dmg</small>
+            </a>
+            <a class="platform" data-asset="mac-intel" href="https://github.com/ZipEmUp-source/Mimir-releases/releases/latest">
+              <svg aria-hidden="true"><use href="#i-apple"/></svg>
+              <b>Mac with Intel</b>
+              <small data-size>Intel Macs · .dmg</small>
+            </a>
+          </div>
+
+          <div class="download-notes">
+            <p><b>On Windows</b>Because Mimir is new, Windows may say it protected your PC the first time. Choose More info, then Run anyway.</p>
+            <p><b>On a Mac</b>Signed and notarized by Apple. Open the .dmg and drag Mimir into Applications.</p>
+            <p><b>After that</b>Mimir tells you when a new version is out, and installs it with one click.</p>
+          </div>
+
+          <p class="version-line">
+            <span data-release-long>Every version is on GitHub.</span>
+            <a href="https://github.com/ZipEmUp-source/Mimir-releases/releases/latest" data-release-notes>What's new</a>
+            <a href="https://github.com/ZipEmUp-source/Mimir-releases/releases">All releases</a>
+            <a href="https://github.com/ZipEmUp-source/Mimir-releases/releases/latest" data-asset="windows-msi" hidden>Windows .msi</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq" aria-labelledby="faq-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Questions</span>
+          <h2 id="faq-title">Asked at the Well</h2>
+        </div>
+        <div class="faq reveal">
+          <details>
+            <summary>Is Mimir free?</summary>
+            <div class="answer"><p>Yes. Mimir is free to download and use. You pay your AI provider directly, or use the Claude or ChatGPT plan you already have.</p></div>
+          </details>
+          <details>
+            <summary>What do I need to start?</summary>
+            <div class="answer">
+              <p>A Windows 10 or 11 PC, or a Mac. Then one way to reach an AI:</p>
+              <p>a Claude plan through the official Claude Code app, a ChatGPT plan through the official Codex app, an API key from Anthropic, OpenAI or DeepSeek, or a model you run yourself with Ollama or any OpenAI-compatible server.</p>
+            </div>
+          </details>
+          <details>
+            <summary>Can anyone read my chats?</summary>
+            <div class="answer">
+              <p>Your chats live on your computer, and your messages go straight from your computer to the AI provider you picked.</p>
+              <p>With a Mimir account, what syncs between your computers is sealed on your computer first. The account service stores it but cannot read it.</p>
+            </div>
+          </details>
+          <details>
+            <summary>Is it safe to let an AI run commands?</summary>
+            <div class="answer"><p>Mimir asks first. Commands, looks at your screen and control of your mouse and keyboard each stop at a system dialog that defaults to No, and every one of those switches starts off.</p></div>
+          </details>
+          <details>
+            <summary>How do updates reach me?</summary>
+            <div class="answer"><p>Mimir checks for a new version a few seconds after it starts, then every six hours. When one is out, a gold pill lights up in the status bar with the release notes and an Install button.</p></div>
+          </details>
+          <details>
+            <summary>Do I need an account?</summary>
+            <div class="answer">
+              <p>From the next update, Mimir asks you to make a free account the first time it opens: your email and a code, no password. The account is what carries your chats between computers.</p>
+              <p>If the account service ever cannot be reached, Mimir lets you in anyway and asks again the next time it opens.</p>
+            </div>
+          </details>
+          <details>
+            <summary>Something broke. Where do I say so?</summary>
+            <div class="answer"><p>Open an issue on <a href="https://github.com/ZipEmUp-source/Mimir-releases/issues">GitHub</a> and say what you did and what you saw. A screenshot helps.</p></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="final" aria-labelledby="final-title">
+      <div class="wrap reveal">
+        <h2 id="final-title">Drink from the Well.</h2>
+        <p>Odin gave an eye for one sip. Mimir costs you nothing.</p>
+        <a class="btn btn-gold btn-large" href="#download" data-primary-download>
+          <svg aria-hidden="true"><use href="#i-down"/></svg><span data-primary-label>Download Mimir</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-row">
+        <a class="brand" href="#top">
+          <svg class="logo" aria-hidden="true"><use href="#logo"/></svg>
+          <span class="brand-name">MIMIR</span>
+        </a>
+        <ul class="footer-links">
+          <li><a href="#download">Download</a></li>
+          <li><a href="https://github.com/ZipEmUp-source/Mimir-releases">GitHub</a></li>
+          <li><a href="https://github.com/ZipEmUp-source/Mimir-releases/issues">Report a bug</a></li>
+          <li><a href="/privacy.html">Privacy</a></li>
+        </ul>
+      </div>
+      <p class="fine">© <span data-year>2026</span> Mimir. Named for the keeper of the Well of Wisdom beneath Yggdrasil. Claude and Claude Code are trademarks of Anthropic; ChatGPT and Codex are trademarks of OpenAI.</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/site.js" defer></script>
+</body>
+</html>
