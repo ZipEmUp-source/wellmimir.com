@@ -13,8 +13,7 @@ To look at it on this computer: `python -m http.server 4620 --directory C:\Dev\w
 
 ## Things to change when a release ships
 
-- The accounts section and two answers under "Questions" say accounts arrive **in the next update**.
-  Once the release with accounts is published, remove the `badge` line in `#accounts` and reword those two answers.
+- Accounts shipped in v0.20.0 "Ratatoskr" (2026-09-30); the accounts section's badge says "New in v0.20".
 
 ## Hosting (GitHub Pages, free)
 
