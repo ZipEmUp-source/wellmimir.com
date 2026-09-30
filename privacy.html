@@ -64,6 +64,7 @@
       <h2>Updates and model facts</h2>
       <ul>
         <li>A few seconds after it starts, and every six hours after that, Mimir asks GitHub whether a newer version is out. Updates download from GitHub.</li>
+        <li>At the same time, Mimir asks the Mimir account service which version is current. That question is the same for everyone and names no account.</li>
         <li>Mimir asks the providers you connected which models they offer, and reads public facts about models (names, limits, prices) from models.dev.</li>
         <li>Like any web request, these show the other end your IP address.</li>
       </ul>
@@ -73,7 +74,8 @@
       <ul>
         <li>your email address, to send you sign-in codes;</li>
         <li>sealed copies of your chats, memory notes and skill notes, with their sizes and how many there are;</li>
-        <li>the names of your computers while one is asking to be let in, and when it asked.</li>
+        <li>the names of your computers while one is asking to be let in, and when it asked;</li>
+        <li>for each computer signed in to your account: its name, its system (Windows or macOS, and which kind of processor), the version of Mimir it runs, and when it last said so. Your own computers read this list, so each can tell when one of them is behind. Settings → Account takes a computer you no longer use off it.</li>
       </ul>
       <p>Everything that syncs is sealed on your computer, with a key only your computers hold, before it leaves. The account service stores it and cannot read it. Nobody who runs the service can read your chats, your memory, your file names or your keys, and nobody there can open your vault for you.</p>
       <p>The account service runs on Supabase, in the United States. Sign-in codes are emailed through Resend.</p>
