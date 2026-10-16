@@ -249,7 +249,10 @@
       <div class="wrap">
         <div class="download-panel reveal">
           <div class="download-top">
-            <img src="/assets/img/eye-256.png" width="96" height="96" alt="">
+            <picture>
+              <source type="image/webp" srcset="/assets/img/eye-128.webp 1x, /assets/img/eye-256.webp 2x">
+              <img src="/assets/img/eye-256.png" width="96" height="96" loading="lazy" decoding="async" alt="">
+            </picture>
             <div>
               <h2 id="download-title">Get Mimir</h2>
               <p>Free for Windows and Mac. Sign in with your Claude or ChatGPT plan, or paste an API key.</p>
