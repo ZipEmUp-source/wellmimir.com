@@ -162,6 +162,9 @@ a:hover { color: var(--gold-bright); }
 .iris-ring svg { width: 100%; height: 100%; animation: turn 140s linear infinite; }
 .iris-ring text { fill: var(--gold); font: 400 4.2px var(--font-serif); }
 @keyframes turn { to { rotate: 360deg; } }
+/* The logo's pupil pulses in CSS, not SMIL, so prefers-reduced-motion stops it. */
+.logo-pupil { animation: pupil 3.2s linear infinite; }
+@keyframes pupil { 0%, 100% { opacity: 0.75; } 50% { opacity: 1; } }
 .hero::before {
   content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background:
