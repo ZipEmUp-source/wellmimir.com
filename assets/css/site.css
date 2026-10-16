@@ -421,7 +421,7 @@ h1, h2, h3 { text-wrap: balance; }
   z-index: -1; background: url("../img/well-800.webp") center/cover; border-radius: 50%; opacity: 0.18;
   mask: radial-gradient(closest-side, #000 30%, transparent); -webkit-mask: radial-gradient(closest-side, #000 30%, transparent);
 }
-.final h2 { margin: 0 0 12px; font: 600 clamp(36px, 5.6vw, 68px)/1.05 var(--font-display); color: var(--gold-bright); }
+.final h1, .final h2 { margin: 0 0 12px; font: 600 clamp(36px, 5.6vw, 68px)/1.05 var(--font-display); color: var(--gold-bright); }
 .final p { margin: 0 auto 30px; max-width: 560px; color: var(--text-soft); font-size: 19px; }
 
 /* Footer */
