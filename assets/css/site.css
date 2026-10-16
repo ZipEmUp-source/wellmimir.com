@@ -39,6 +39,9 @@
 *::after { box-sizing: border-box; }
 
 html {
+  /* Wide glows (the Ward's) would otherwise widen a phone's layout viewport. */
+  overflow-x: hidden;
+  overflow-x: clip;
   scroll-behavior: smooth;
   scroll-padding-top: 84px;
   -webkit-text-size-adjust: 100%;
