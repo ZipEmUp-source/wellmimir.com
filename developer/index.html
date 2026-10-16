@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Developers · Mimir</title>
+  <meta name="description" content="Mimir credits monitor, for Mimir's developers.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#090d13">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/developer.css">
+</head>
+<body class="dev">
+  <a class="skip" href="#main">Skip to content</a>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="logo" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="28" fill="none" stroke="#d9ad5c" stroke-width="2.4"/>
+        <circle cx="32" cy="32" r="24" fill="none" stroke="#d9ad5c" stroke-width="0.8" stroke-opacity="0.5"/>
+        <path d="M11 32 Q 32 15 53 32 Q 32 49 11 32 Z" fill="#53d6c2" fill-opacity="0.06" stroke="#d9ad5c" stroke-width="2" stroke-linejoin="round"/>
+        <circle cx="32" cy="32" r="9" fill="#53d6c2" fill-opacity="0.14" stroke="#53d6c2" stroke-width="1.6" stroke-opacity="0.9"/>
+        <circle cx="32" cy="32" r="3.8" fill="#53d6c2"/>
+        <path d="M32 1.5v6M32 56.5v6M1.5 32h6M56.5 32h6" fill="none" stroke="#d9ad5c" stroke-width="2" stroke-linecap="round"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <header class="site-header is-solid">
+    <nav class="nav wrap" aria-label="Main">
+      <a class="brand" href="/" aria-label="Mimir home">
+        <svg class="logo" aria-hidden="true"><use href="#logo"/></svg>
+        <span class="brand-name">MIMIR</span>
+      </a>
+      <span class="dev-tag">Developers</span>
+      <div class="dev-who" id="who" hidden>
+        <span class="dev-email" id="who-email"></span>
+        <button class="btn btn-ghost btn-small" type="button" id="sign-out">Sign out</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main" class="page dev-page">
+    <div class="wrap">
+      <!-- Sign in: an emailed code, no password -->
+      <section class="dev-card dev-signin" id="signin" hidden>
+        <span class="eyebrow">Developers</span>
+        <h1>Credits monitor</h1>
+        <p class="dev-lede">Sign in with the email of your Mimir account. We will send you a one-time code.</p>
+
+        <form id="email-form" class="dev-form" novalidate>
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required spellcheck="false">
+          <button class="btn btn-gold" type="submit">Send code</button>
+        </form>
+
+        <form id="code-form" class="dev-form" novalidate hidden>
+          <p class="dev-sent" id="code-sent"></p>
+          <label for="code">Code</label>
+          <input id="code" name="code" type="text" autocomplete="one-time-code" inputmode="numeric" maxlength="10" required spellcheck="false">
+          <button class="btn btn-gold" type="submit">Sign in</button>
+          <button class="dev-link" type="button" id="code-back">Use a different email</button>
+        </form>
+
+        <p class="dev-msg" id="signin-msg" role="alert" aria-live="assertive"></p>
+      </section>
+
+      <!-- Signed in, but this account may not see the monitor, or the monitor is missing -->
+      <section class="dev-card dev-signin" id="blocked" hidden>
+        <span class="eyebrow">Developers</span>
+        <h1 id="blocked-title"></h1>
+        <p class="dev-lede" id="blocked-text"></p>
+        <div class="dev-actions">
+          <button class="btn btn-ghost" type="button" id="blocked-retry">Try again</button>
+          <button class="btn btn-gold" type="button" id="blocked-out">Sign out</button>
+        </div>
+      </section>
+
+      <!-- The dashboard -->
+      <section id="dash" hidden aria-labelledby="dash-title">
+        <div class="dev-head">
+          <div>
+            <span class="eyebrow">Developers</span>
+            <h1 id="dash-title">Mimir credits</h1>
+            <p class="dev-updated" id="updated" aria-live="polite"></p>
+          </div>
+          <button class="btn btn-ghost btn-small" type="button" id="refresh">Refresh</button>
+        </div>
+        <p class="dev-msg" id="dash-msg" role="alert" aria-live="assertive"></p>
+
+        <ul class="tiles" id="tiles" aria-label="Totals"></ul>
+
+        <div class="dev-panel">
+          <div class="panel-head">
+            <h2>Last 30 days</h2>
+            <ul class="legend" aria-hidden="true">
+              <li><span class="key key-bar"></span>Credits spent</li>
+              <li><span class="key key-line"></span>Active users</li>
+            </ul>
+          </div>
+          <div class="chart" id="chart"></div>
+        </div>
+
+        <div class="dev-panel">
+          <div class="panel-head">
+            <h2>Users <span class="count" id="user-count"></span></h2>
+            <div class="table-tools">
+              <label class="sr-only" for="search">Search by email</label>
+              <input id="search" type="search" placeholder="Search by email" spellcheck="false" autocomplete="off">
+              <label class="sr-only" for="sort">Sort by</label>
+              <select id="sort">
+                <option value="active">Last active</option>
+                <option value="balance">Balance</option>
+                <option value="spent">Spent, 30 days</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-scroll" tabindex="0" role="region" aria-label="Users">
+            <table class="dev-table" id="users">
+              <thead>
+                <tr>
+                  <th scope="col">Email</th>
+                  <th scope="col" class="num">Balance</th>
+                  <th scope="col" class="num">Spent 30d</th>
+                  <th scope="col" class="num">Turns 30d</th>
+                  <th scope="col">Last turn</th>
+                  <th scope="col">Last model</th>
+                  <th scope="col" class="num">Computers</th>
+                  <th scope="col">Joined</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <p class="dev-note">A green dot means a turn in the last 24 hours. Pick a user to see their ledger.</p>
+        </div>
+
+        <div class="dev-panel" id="grant-panel">
+          <div class="panel-head"><h2>Give credits</h2></div>
+          <form id="grant-form" class="grant-form" novalidate>
+            <div class="field">
+              <label for="grant-email">Email</label>
+              <input id="grant-email" type="email" required spellcheck="false" autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="grant-amount">Credits</label>
+              <input id="grant-amount" type="number" step="1" required inputmode="numeric" placeholder="1000">
+            </div>
+            <div class="field field-wide">
+              <label for="grant-note">Note</label>
+              <input id="grant-note" type="text" maxlength="200" placeholder="Why, in a few words">
+            </div>
+            <button class="btn btn-gold" type="submit" id="grant-go">Give credits</button>
+          </form>
+          <p class="dev-note">1,000 credits = $1. A negative number takes credits back.</p>
+          <div class="confirm" id="grant-confirm" hidden>
+            <p id="grant-question"></p>
+            <div class="dev-actions">
+              <button class="btn btn-gold btn-small" type="button" id="grant-yes">Yes, send</button>
+              <button class="btn btn-ghost btn-small" type="button" id="grant-no">Cancel</button>
+            </div>
+          </div>
+          <p class="dev-msg" id="grant-msg" role="status" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <p class="dev-loading" id="loading">Loading…</p>
+    </div>
+  </main>
+
+  <dialog class="ledger" id="ledger" aria-labelledby="ledger-title">
+    <div class="ledger-head">
+      <div>
+        <span class="ledger-kicker">Ledger</span>
+        <h2 id="ledger-title"></h2>
+      </div>
+      <button class="btn btn-ghost btn-small" type="button" id="ledger-close">Close</button>
+    </div>
+    <p class="dev-msg" id="ledger-msg" role="status" aria-live="polite"></p>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Ledger entries">
+      <table class="dev-table" id="ledger-table">
+        <thead>
+          <tr>
+            <th scope="col">When</th>
+            <th scope="col">Kind</th>
+            <th scope="col" class="num">Credits</th>
+            <th scope="col" class="num">Balance after</th>
+            <th scope="col">Model</th>
+            <th scope="col" class="num">Tokens in / cached / out</th>
+            <th scope="col">Note</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="dev-actions ledger-foot">
+      <button class="btn btn-gold btn-small" type="button" id="ledger-give">Give credits to this user</button>
+    </div>
+  </dialog>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-row">
+        <a class="brand" href="/">
+          <svg class="logo" aria-hidden="true"><use href="#logo"/></svg>
+          <span class="brand-name">MIMIR</span>
+        </a>
+        <ul class="footer-links">
+          <li><a href="/#download">Download</a></li>
+          <li><a href="/privacy.html">Privacy</a></li>
+        </ul>
+      </div>
+      <p class="fine">© 2026 Mimir.</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/developer.js" defer></script>
+</body>
+</html>

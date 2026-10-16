@@ -7,6 +7,8 @@ The website for Mimir. Plain HTML, CSS and a little JavaScript: no build step.
 - `assets/js/site.js` points every download button at the newest **published** release in
   [ZipEmUp-source/Mimir-releases](https://github.com/ZipEmUp-source/Mimir-releases), with its size and Norse name.
   A draft release never shows here; publishing one updates the site by itself.
+- `developer/` is the credits monitor for Mimir's developers (`assets/js/developer.js`, `assets/css/developer.css`): sign in with an
+  emailed code, then it reads the `mimir_admin_*` functions of the account service. It is kept out of search (noindex, robots.txt).
 - `assets/img/` holds the eye, the icons, the link-preview card (`og-card.jpg`) and real screenshots of Mimir.
 
 To look at it on this computer: `python -m http.server 4620 --directory C:\Dev\wellmimir-site`, then open http://localhost:4620.
