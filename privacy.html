@@ -43,12 +43,13 @@
     <article class="prose wrap">
       <span class="eyebrow">Privacy</span>
       <h1>What Mimir keeps, and who can see it</h1>
-      <p class="updated">Last updated September 30, 2026</p>
+      <p class="updated">Last updated October 16, 2026</p>
       <p>Mimir is a desktop app. Almost everything it knows about you stays on your computer. This page says what leaves it, where it goes, and why.</p>
 
       <h2>On your computer</h2>
       <ul>
         <li>Your chats, memory notes, skill notes and settings live in your Mimir workspace, a folder on your computer.</li>
+        <li>Mimir's mind (his notes about himself and about you) and his journal of what he did stay on this computer. They are not synced, and travel only to the AI model you are talking to.</li>
         <li>API keys you give Mimir are sealed by Windows or by the macOS Keychain. They are never kept in plain text.</li>
         <li>Mimir's error logs stay on your computer. Mimir has no ads and no analytics, and sends no tracking data anywhere.</li>
       </ul>
@@ -59,6 +60,14 @@
         <li>With a Claude or ChatGPT plan, Mimir works through the official Claude Code or Codex app on your computer, and signs in only through them.</li>
         <li>If you turn on ElevenLabs voices, the text to be spoken goes to ElevenLabs.</li>
         <li>We do not receive your messages.</li>
+      </ul>
+
+      <h2>Your phone</h2>
+      <p>If you pair the Mimir phone app in Settings → Phone:</p>
+      <ul>
+        <li>The phone reaches this computer directly, through a private HTTPS address on your own network (such as Tailscale). Your chats and files go between your phone and your computer, not through us.</li>
+        <li>When a reply or a picture is ready, Mimir sends your phone a notification through Expo's push service and Apple's. Unless you turn previews off on the phone, it carries the chat's title and the first words of the reply.</li>
+        <li>No API key ever goes to the phone. A DeepSeek key that phone agents use is kept in Windows' credential store on this computer.</li>
       </ul>
 
       <h2>Updates and model facts</h2>
