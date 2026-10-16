@@ -13,7 +13,8 @@ To look at it on this computer: `python -m http.server 4620 --directory C:\Dev\w
 
 ## Things to change when a release ships
 
-- Accounts shipped in v0.20.0 "Ratatoskr" (2026-09-30); the accounts section's badge says "New in v0.20".
+- The accounts section's badge says "Updated in v0.21" (v0.21.0 "Hliðskjálf" added Your computers).
+- The privacy page's "Your phone" section follows the phone link: if notifications stop going through Expo's push service, or the link starts relaying through a server, change it there.
 
 ## Hosting (GitHub Pages, free)
 
