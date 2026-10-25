@@ -157,6 +157,46 @@
 #ledger-msg { margin: 10px 0 12px; }
 .ledger-foot { margin-top: 14px; }
 
+/* Messages */
+.threads { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.thread-row {
+  width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: baseline;
+  padding: 12px 14px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: rgba(17, 25, 39, 0.55);
+  color: var(--text); font: 400 14px var(--font-ui); text-align: left; cursor: pointer;
+}
+.thread-row:hover { border-color: var(--teal-30); background: rgba(83, 214, 194, 0.05); }
+.thread-row.is-unread { border-color: var(--gold-45); }
+.thread-email { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.thread-when { color: var(--muted); font-size: 13px; white-space: nowrap; }
+.thread-last { grid-column: 1 / -1; color: var(--text-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.thread-badge { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--bg); background: var(--gold-bright); }
+.threads .empty { color: var(--muted); font-size: 14px; padding: 6px 0; }
+.sub-head { margin: 18px 0 8px; font: 600 13px var(--font-ui); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.broadcasts-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.broadcasts-list li { padding: 10px 14px; border-radius: var(--radius-sm); border: 1px dashed var(--line-strong); }
+.broadcasts-list p { margin: 0 0 4px; color: var(--text-soft); white-space: pre-wrap; overflow-wrap: anywhere; }
+.broadcasts-list small { color: var(--muted); font-size: 13px; }
+.convo { width: min(720px, calc(100vw - 24px)); }
+.convo-list { list-style: none; margin: 14px 0; padding: 2px; display: grid; gap: 10px; overflow-y: auto; min-height: 60px; flex: 1 1 auto; }
+.convo-item { max-width: 86%; padding: 10px 13px; border-radius: var(--radius-sm); border: 1px solid var(--line); display: grid; gap: 4px; }
+.convo-item.is-dev { justify-self: end; border-color: var(--gold-25); background: var(--gold-12); }
+.convo-item.is-user { justify-self: start; border-color: var(--teal-30); background: var(--teal-14); }
+.convo-who { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.convo-item.is-dev .convo-who { color: var(--gold-bright); }
+.convo-item.is-user .convo-who { color: var(--teal); }
+.convo-body { margin: 0; color: var(--text); white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.5; }
+.convo-when { color: var(--muted); font-size: 12px; }
+.convo-list .empty { color: var(--muted); font-size: 14px; }
+.convo-form { display: grid; gap: 8px; }
+.dev textarea {
+  width: 100%; resize: vertical; min-height: 92px; padding: 10px 12px; border-radius: var(--radius-sm);
+  border: 1px solid var(--line-strong); background: rgba(9, 13, 19, 0.7); color: var(--text); font: 400 15px/1.5 var(--font-ui);
+}
+.dev textarea:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-14); }
+.convo-tools { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.convo-tools .dev-note { margin: 0; }
+.convo.is-everyone .convo-list { display: none; }
+
 @media (max-width: 1020px) {
   .grant-form { grid-template-columns: 1fr 1fr; }
   .grant-form .btn { grid-column: 1 / -1; }

@@ -8,7 +8,10 @@ The website for Mimir. Plain HTML, CSS and a little JavaScript: no build step.
   [ZipEmUp-source/Mimir-releases](https://github.com/ZipEmUp-source/Mimir-releases), with its size and Norse name.
   A draft release never shows here; publishing one updates the site by itself.
 - `developer/` is the credits monitor for Mimir's developers (`assets/js/developer.js`, `assets/css/developer.css`): sign in with an
-  emailed code, then it reads the `mimir_admin_*` functions of the account service: credits, and the bug reports people and Mimir's error checker send (mark each checked, fixed or ignored). It is kept out of search (noindex, robots.txt).
+  emailed code, then it reads the `mimir_admin_*` functions of the account service: credits, and the bug reports people and Mimir's error checker send
+  (mark each checked, fixed or ignored). Its Messages panel writes free messages to one
+  user or to everyone and reads their answers (`mimir_admin_inbox` / `_thread` / `_send`; people read and answer in Mimir's
+  Settings → Account and Mimir Mobile's Settings → Messages). It is kept out of search (noindex, robots.txt).
 - `assets/img/` holds the eye, the icons, the link-preview card (`og-card.jpg`) and real screenshots of Mimir.
 
 To look at it on this computer: `python -m http.server 4620 --directory C:\Dev\wellmimir-site`, then open http://localhost:4620.
