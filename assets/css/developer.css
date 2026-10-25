@@ -236,3 +236,9 @@
 }
 .bug-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px 14px 14px; }
 .bug-actions input { flex: 1 1 220px; min-height: 38px; font-size: 14px; }
+
+/* The authenticator step */
+.svg-defs { position: absolute; }
+.mfa-enrol { display: grid; justify-items: center; gap: 8px; margin: 0 0 18px; }
+.mfa-qr { width: 200px; height: 200px; padding: 10px; background: #fff; border-radius: var(--radius-sm, 8px); }
+.mfa-secret { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 14px; letter-spacing: .08em; overflow-wrap: anywhere; text-align: center; user-select: all; }

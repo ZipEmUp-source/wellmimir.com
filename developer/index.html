@@ -7,6 +7,7 @@
   <meta name="description" content="Mimir credits monitor, bug reports and messages, for Mimir's developers.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://ujeqidiltvghvhawbrag.supabase.co; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
   <meta name="theme-color" content="#090d13">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
@@ -18,7 +19,7 @@
 </head>
 <body class="dev">
   <a class="skip" href="#main">Skip to content</a>
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <svg class="svg-defs" width="0" height="0" aria-hidden="true">
     <defs>
       <symbol id="logo" viewBox="0 0 64 64">
         <circle cx="32" cy="32" r="28" fill="none" stroke="#d9ad5c" stroke-width="2.4"/>
@@ -68,6 +69,25 @@
         </form>
 
         <p class="dev-msg" id="signin-msg" role="alert" aria-live="assertive"></p>
+      </section>
+
+      <!-- The second lock: an authenticator app's code, after the emailed one -->
+      <section class="dev-card dev-signin" id="mfa" hidden>
+        <span class="eyebrow">Developers</span>
+        <h1 id="mfa-title">Authenticator code</h1>
+        <p class="dev-lede" id="mfa-text"></p>
+        <div class="mfa-enrol" id="mfa-enrol" hidden>
+          <img class="mfa-qr" id="mfa-qr" alt="QR code to scan with an authenticator app" width="200" height="200">
+          <p class="dev-sent">Can't scan? Type this key into the app instead:</p>
+          <code class="mfa-secret" id="mfa-secret"></code>
+        </div>
+        <form id="mfa-form" class="dev-form" novalidate>
+          <label for="mfa-code">Six-digit code from the app</label>
+          <input id="mfa-code" name="mfa-code" type="text" autocomplete="one-time-code" inputmode="numeric" maxlength="6" required spellcheck="false">
+          <button class="btn btn-gold" type="submit" id="mfa-go">Confirm</button>
+          <button class="dev-link" type="button" id="mfa-out">Sign out</button>
+        </form>
+        <p class="dev-msg" id="mfa-msg" role="alert" aria-live="assertive"></p>
       </section>
 
       <!-- Signed in, but this account may not see the monitor, or the monitor is missing -->
