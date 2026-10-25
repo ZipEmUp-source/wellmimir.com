@@ -11,7 +11,7 @@ The website for Mimir. Plain HTML, CSS and a little JavaScript: no build step.
   emailed code, then it reads the `mimir_admin_*` functions of the account service: credits, and the bug reports people and Mimir's error checker send
   (mark each checked, fixed or ignored). Its Messages panel writes free messages to one
   user or to everyone and reads their answers (`mimir_admin_inbox` / `_thread` / `_send`; people read and answer in Mimir's
-  Settings → Account and Mimir Mobile's Settings → Messages). It is kept out of search (noindex, robots.txt).
+  Settings → Account and Mimir Mobile's Settings → Messages). It is kept out of search (noindex, robots.txt). Two locks, both kept by the account service: the account must be on the developers' list, and the session must have passed an authenticator app's code in the last twelve hours (the page sets one up the first time; Mimir's `supabase/README.md`, step 4). A Content-Security-Policy lets the page talk only to the account service.
 - `assets/img/` holds the eye, the icons, the link-preview card (`og-card.jpg`) and real screenshots of Mimir.
 
 To look at it on this computer: `python -m http.server 4620 --directory C:\Dev\wellmimir-site`, then open http://localhost:4620.

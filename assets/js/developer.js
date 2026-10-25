@@ -5,6 +5,12 @@
 // and Mimir's error checker send (each marked checked, fixed or ignored), and
 // messages: free words to one user or to everyone, read and answered inside Mimir.
 //
+// Two locks, both kept by the account service, not by this page: the account
+// must be on the developers' list (mimir_private.credit_admins, by account id),
+// and the session must have passed an authenticator app's code (Supabase Auth
+// MFA, TOTP) in the last twelve hours, with exactly one authenticator on the
+// account. This page only walks a developer through the second step.
+//
 // Every node that shows data is built with createElement + textContent:
 // emails and notes are written by users, so nothing here uses innerHTML.
 (() => {
@@ -164,6 +170,8 @@
     }
   };
   const isNotInstalled = (err) => err.status === 404 || err.code === 'PGRST202' || err.code === '42883';
+  // The account is on the list but this session has not passed the authenticator code.
+  const needsMfa = (err) => !!(err && err.body && err.body.hint === 'mfa');
   const isNotAdmin = (err) => err.code === '42501' || err.status === 403;
 
   // Plain words for what the auth service says.
@@ -191,7 +199,7 @@
   };
 
   // ── Views ────────────────────────────────────────────────────────────────
-  const views = ['signin', 'blocked', 'dash', 'loading'];
+  const views = ['signin', 'mfa', 'blocked', 'dash', 'loading'];
   const show = (name) => {
     for (const v of views) $(v).hidden = v !== name;
     const signedIn = !!session && name !== 'signin';
@@ -285,6 +293,7 @@
   };
   $('sign-out').addEventListener('click', signOut);
   $('blocked-out').addEventListener('click', signOut);
+  $('mfa-out').addEventListener('click', signOut);
   $('blocked-retry').addEventListener('click', () => enter());
 
   const onSessionLost = () => {
@@ -301,15 +310,106 @@
   const NOT_DEV = ['This account is not a Mimir developer.', 'The credits monitor is only for Mimir\'s developers. Sign in with a developer account.'];
   const NOT_INSTALLED = ['Not installed yet', 'The credits monitor is not installed on the account service yet.'];
 
+  // ── The second lock: an authenticator app's code ─────────────────────────
+  let mfaFactor = null; // the factor id the code is checked against
+  const TWO_FACTORS = ['Locked: two authenticators', 'This account has more than one authenticator app, so the developer page stays locked. If you did not add the second one, someone may have your email. Remove them all from the Supabase SQL editor (supabase/README.md, step 4), then sign in again to set up one.'];
+
+  const showMfa = async (status) => {
+    stopAuto();
+    show('loading');
+    if (status && Number(status.factors) > 1) { showBlocked(...TWO_FACTORS); return; }
+    let factors = [];
+    try {
+      const user = await call('/auth/v1/user', undefined, { auth: true, method: 'GET' });
+      factors = Array.isArray(user && user.factors) ? user.factors.filter((f) => f.factor_type === 'totp') : [];
+    } catch (err) {
+      if (err.status === 401 || err.status === 403) { onSessionLost(); return; }
+      showBlocked('Could not check this account', authWords(err));
+      return;
+    }
+    const verified = factors.filter((f) => f.status === 'verified');
+    if (verified.length > 1) { showBlocked(...TWO_FACTORS); return; }
+    $('mfa-code').value = '';
+    say($('mfa-msg'), '');
+    if (verified.length === 1) {
+      mfaFactor = verified[0].id;
+      $('mfa-title').textContent = 'Authenticator code';
+      $('mfa-text').textContent = 'Type the six-digit code your authenticator app shows for Mimir.';
+      $('mfa-enrol').hidden = true;
+    } else {
+      // First time: clear any half-finished setup, then make a new one.
+      for (const f of factors) {
+        try { await call(`/auth/v1/factors/${encodeURIComponent(f.id)}`, undefined, { auth: true, method: 'DELETE' }); } catch { /* left for Supabase to expire */ }
+      }
+      let enrolled;
+      try {
+        enrolled = await call('/auth/v1/factors', { factor_type: 'totp', friendly_name: `Mimir developer ${new Date().toISOString().slice(0, 10)}`, issuer: 'Mimir developer' }, { auth: true });
+      } catch (err) {
+        showBlocked('Could not set up an authenticator', `The account service said: ${err.message}. Check that App Authenticator (TOTP) is on in Supabase → Authentication → Multi-Factor.`);
+        return;
+      }
+      mfaFactor = enrolled.id;
+      $('mfa-title').textContent = 'Set up an authenticator';
+      $('mfa-text').textContent = 'One more lock on this page. Scan this with an authenticator app (Google Authenticator, 1Password, Authy…), then type the six digits it shows. From now on it asks for them at every sign-in.';
+      const qr = enrolled.totp && typeof enrolled.totp.qr_code === 'string' ? enrolled.totp.qr_code : '';
+      $('mfa-qr').hidden = !qr.startsWith('data:image/');
+      if (qr.startsWith('data:image/')) $('mfa-qr').src = qr;
+      $('mfa-secret').textContent = (enrolled.totp && enrolled.totp.secret) || '';
+      $('mfa-enrol').hidden = false;
+    }
+    show('mfa');
+    $('mfa-code').focus();
+  };
+
+  $('mfa-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const code = $('mfa-code').value.replace(/\s+/g, '');
+    if (!/^\d{6}$/.test(code)) {
+      say($('mfa-msg'), 'The code is the six digits the app shows.', 'error');
+      return;
+    }
+    if (!mfaFactor) return;
+    busy($('mfa-form'), true);
+    say($('mfa-msg'), 'Checking…');
+    try {
+      await fresh();
+      const id = encodeURIComponent(mfaFactor);
+      const challenge = await call(`/auth/v1/factors/${id}/challenge`, {}, { auth: true });
+      const a = await call(`/auth/v1/factors/${id}/verify`, { challenge_id: challenge.id, code }, { auth: true });
+      saveSession(fromAuthAnswer(a));
+      scheduleRefresh();
+      $('mfa-secret').textContent = '';
+      $('mfa-qr').removeAttribute('src');
+      say($('mfa-msg'), '');
+      await enter();
+    } catch (err) {
+      const c = String(err.code || '');
+      say($('mfa-msg'), c === 'mfa_verification_failed' || c.startsWith('mfa_challenge') || err.status === 422
+        ? 'That code did not match. Wait for the next one and try again.'
+        : authWords(err), 'error');
+    } finally {
+      busy($('mfa-form'), false);
+    }
+  });
+
   // Signed in: check the account may see the monitor, then load it.
   const enter = async () => {
     show('loading');
     try {
-      const ok = await rpc('mimir_admin_check', {});
-      if (ok !== true) { showBlocked(...NOT_DEV); return; }
+      let status;
+      try {
+        status = await rpc('mimir_admin_status', {});
+      } catch (err) {
+        if (!isNotInstalled(err)) throw err;
+        // An account service from before the second lock: the list alone decides.
+        status = { admin: (await rpc('mimir_admin_check', {})) === true, mfa: true };
+      }
+      if (!status || status.admin !== true) { showBlocked(...NOT_DEV); return; }
+      if (status.mfa !== true) { await showMfa(status); return; }
     } catch (err) {
       if (err.status === 401) { onSessionLost(); return; }
       if (isNotInstalled(err)) { showBlocked(...NOT_INSTALLED); return; }
+      if (needsMfa(err)) { await showMfa(null); return; }
       if (isNotAdmin(err)) { showBlocked(...NOT_DEV); return; }
       showBlocked('Could not check this account', rpcWords(err));
       return;
@@ -340,6 +440,7 @@
     } catch (err) {
       if (err.status === 401) { onSessionLost(); return; }
       if (isNotInstalled(err)) { showBlocked(...NOT_INSTALLED); return; }
+      if (needsMfa(err)) { showMfa(null); return; }
       if (isNotAdmin(err)) { showBlocked(...NOT_DEV); return; }
       say($('dash-msg'), `Could not load the numbers. ${rpcWords(err)}`, 'error');
     } finally {
