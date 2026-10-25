@@ -2,13 +2,13 @@
 
 The website for Mimir. Plain HTML, CSS and a little JavaScript: no build step.
 
-- `index.html` is the home page, `privacy.html` the privacy page, `404.html` the page for a wrong address.
+- `index.html` is the home page, `start/` the Getting started guide (real screenshots `assets/img/start-*.webp`, taken from Mimir's browser preview), `privacy.html` the privacy page, `404.html` the page for a wrong address.
 - `assets/css/site.css` holds the look, in Mimir's own colours (midnight, teal and gold).
 - `assets/js/site.js` points every download button at the newest **published** release in
   [ZipEmUp-source/Mimir-releases](https://github.com/ZipEmUp-source/Mimir-releases), with its size and Norse name.
   A draft release never shows here; publishing one updates the site by itself.
 - `developer/` is the credits monitor for Mimir's developers (`assets/js/developer.js`, `assets/css/developer.css`): sign in with an
-  emailed code, then it reads the `mimir_admin_*` functions of the account service. It is kept out of search (noindex, robots.txt).
+  emailed code, then it reads the `mimir_admin_*` functions of the account service: credits, and the bug reports people and Mimir's error checker send (mark each checked, fixed or ignored). It is kept out of search (noindex, robots.txt).
 - `assets/img/` holds the eye, the icons, the link-preview card (`og-card.jpg`) and real screenshots of Mimir.
 
 To look at it on this computer: `python -m http.server 4620 --directory C:\Dev\wellmimir-site`, then open http://localhost:4620.

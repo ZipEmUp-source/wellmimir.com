@@ -57,7 +57,7 @@
     <article class="prose wrap">
       <span class="eyebrow">Privacy</span>
       <h1>What Mimir keeps, and who can see it</h1>
-      <p class="updated">Last updated October 17, 2026</p>
+      <p class="updated">Last updated October 25, 2026</p>
       <p>Mimir is a desktop app. Almost everything it knows about you stays on your computer. This page says what leaves it, where it goes, and why.</p>
 
       <h2>On your computer</h2>
@@ -65,7 +65,7 @@
         <li>Your chats, memory notes, skill notes and settings live in your Mimir workspace, a folder on your computer.</li>
         <li>Mimir's mind (his notes about himself and about you) and his journal of what he did stay on this computer. They are not synced, and travel only to the AI model you are talking to.</li>
         <li>API keys you give Mimir are sealed by Windows or by the macOS Keychain. They are never kept in plain text.</li>
-        <li>Mimir's error logs stay on your computer. Mimir has no ads and no analytics, and sends no tracking data anywhere.</li>
+        <li>Mimir's error logs stay on your computer, except for the bug reports below. Mimir has no ads and no analytics, and sends no tracking data anywhere.</li>
       </ul>
 
       <h2>Your AI provider</h2>
@@ -99,11 +99,20 @@
         <li>your email address, to send you sign-in codes;</li>
         <li>sealed copies of your chats, memory notes and skill notes, with their sizes and how many there are;</li>
         <li>the names of your computers while one is asking to be let in, and when it asked;</li>
+        <li>the bug reports you send, and the error reports Mimir sends if you let it (see <a href="#reports">Bug reports</a> below);</li>
         <li>for each computer signed in to your account: its name, its system (Windows or macOS, and which kind of processor), the version of Mimir it runs, and when it last said so. Your own computers read this list, so each can tell when one of them is behind. Settings → Account takes a computer you no longer use off it.</li>
       </ul>
       <p>Everything that syncs is sealed on your computer, with a key only your computers hold, before it leaves. The account service stores it and cannot read it. Nobody who runs the service can read your chats, your memory, your file names or your keys, and nobody there can open your vault for you.</p>
       <p>The account service runs on Supabase, in the United States. Sign-in codes are emailed through Resend.</p>
       <p>Deleting your account, in Settings under Account, removes it and everything it holds from the service. The copies on your own computers stay until you delete them.</p>
+
+      <h2 id="reports">Bug reports</h2>
+      <ul>
+        <li>When you press <b>report</b> and send a report while signed in to your Mimir account, it goes to Mimir's developers through the account service: your words, Mimir's version, your kind of computer (for example Windows on x86-64), the model you were using, the last few things Mimir did and the last lines of its error log. A copy stays on your computer under <code>.mimir/reports</code>.</li>
+        <li>With <b>Send error reports automatically</b> on (Settings → Tidings; the setup guide asks), Mimir checks its error log every five minutes and sends each new kind of error once: the error's words and the few log lines before it, the version and the kind of computer.</li>
+        <li>Before anything leaves, Mimir takes out API keys and other credentials, email addresses, IP addresses, Tailscale machine names and the user name in your folders' paths. A report never carries your chats or your files.</li>
+        <li>Reports are stored with your account so we can tell reports apart and ask about one, and only Mimir's developers can read them. Deleting your account deletes them. Not signed in, nothing is sent.</li>
+      </ul>
 
       <h2>This website</h2>
       <ul>
@@ -125,6 +134,7 @@
         </a>
         <ul class="footer-links">
           <li><a href="/#download">Download</a></li>
+          <li><a href="/start/">Get started</a></li>
           <li><a href="https://github.com/ZipEmUp-source/Mimir-releases">GitHub</a></li>
           <li><a href="https://github.com/ZipEmUp-source/Mimir-releases/issues">Report a bug</a></li>
           <li><a href="/developer/" rel="nofollow">Developers</a></li>

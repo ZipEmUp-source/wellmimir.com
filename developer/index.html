@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Developers · Mimir</title>
-  <meta name="description" content="Mimir credits monitor, for Mimir's developers.">
+  <meta name="description" content="Mimir credits monitor and bug reports, for Mimir's developers.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="referrer" content="no-referrer">
   <meta name="theme-color" content="#090d13">
@@ -138,6 +138,25 @@
             </table>
           </div>
           <p class="dev-note">A green dot means a turn in the last 24 hours. Pick a user to see their ledger.</p>
+        </div>
+
+        <div class="dev-panel" id="bugs-panel">
+          <div class="panel-head">
+            <h2>Bug reports <span class="count" id="bug-count"></span></h2>
+            <div class="table-tools">
+              <label class="sr-only" for="bug-status">Show</label>
+              <select id="bug-status">
+                <option value="new">Open</option>
+                <option value="checked">Checked</option>
+                <option value="fixed">Fixed</option>
+                <option value="ignored">Ignored</option>
+                <option value="">Every status</option>
+              </select>
+            </div>
+          </div>
+          <p class="dev-msg" id="bug-msg" role="status" aria-live="polite"></p>
+          <ul class="bug-list" id="bugs" aria-label="Bug reports"></ul>
+          <p class="dev-note">From people's "report" button and from Mimir's automatic error checker, scrubbed of names, emails, addresses and paths before they left the computer. An automatic report counts every time the same open error came in again. Mark each one once you have looked.</p>
         </div>
 
         <div class="dev-panel" id="grant-panel">

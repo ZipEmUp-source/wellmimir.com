@@ -1,7 +1,8 @@
 // wellmimir.com/developer: the Mimir credits monitor. Sign in with an emailed
 // code (Supabase Auth, the same account service Mimir uses), then read the
 // admin RPCs: totals, a 30-day chart, every user's balance and use, a user's
-// ledger, and a form that gives (or takes back) credits.
+// ledger, a form that gives (or takes back) credits, and the bug reports
+// people and Mimir's error checker send, each marked checked, fixed or ignored.
 //
 // Every node that shows data is built with createElement + textContent:
 // emails and notes are written by users, so nothing here uses innerHTML.
@@ -312,6 +313,7 @@
     }
     show('dash');
     await load();
+    loadBugs();
     startAuto();
   };
 
@@ -352,7 +354,12 @@
   let autoTimer = 0;
   const startAuto = () => {
     stopAuto();
-    autoTimer = setInterval(() => { if (document.visibilityState === 'visible') load(); }, REFRESH_MS);
+    autoTimer = setInterval(() => {
+      if (document.visibilityState !== 'visible') return;
+      load();
+      // Never under someone typing a note.
+      if (!$('bugs').contains(document.activeElement)) loadBugs();
+    }, REFRESH_MS);
   };
   const stopAuto = () => { clearInterval(autoTimer); autoTimer = 0; };
   document.addEventListener('visibilitychange', () => {
@@ -523,6 +530,84 @@
   }, { passive: true });
   $('search').addEventListener('input', renderUsers);
   $('sort').addEventListener('change', renderUsers);
+
+  // ── Bug reports ──────────────────────────────────────────────────────────
+  // Loaded apart from the numbers: a service whose schema.sql predates bug
+  // reports still shows its credits.
+  let bugs = null; // { reports, counts }
+  let bugsLoading = false;
+  const STATUS_WORDS = { new: 'Open', checked: 'Checked', fixed: 'Fixed', ignored: 'Ignored' };
+  const loadBugs = async () => {
+    if (bugsLoading || !session) return;
+    bugsLoading = true;
+    try {
+      const status = $('bug-status').value || null;
+      const answer = await rpc('mimir_admin_bug_reports', { p_status: status, p_limit: 200 });
+      bugs = { reports: Array.isArray(answer && answer.reports) ? answer.reports : [], counts: (answer && answer.counts) || {} };
+      say($('bug-msg'), '');
+      renderBugs();
+    } catch (err) {
+      if (err.status === 401) { onSessionLost(); return; }
+      if (isNotInstalled(err)) {
+        say($('bug-msg'), 'Bug reports are not installed on the account service yet: run the newest supabase/schema.sql in the SQL Editor.', 'error');
+        $('bugs').replaceChildren();
+        return;
+      }
+      say($('bug-msg'), `Could not load the bug reports. ${rpcWords(err)}`, 'error');
+    } finally {
+      bugsLoading = false;
+    }
+  };
+  const renderBugs = () => {
+    if (!bugs) return;
+    const c = bugs.counts;
+    $('bug-count').textContent = `${intFmt.format(num(c.new))} open`;
+    $('bug-count').title = `${num(c.checked)} checked · ${num(c.fixed)} fixed · ${num(c.ignored)} ignored`;
+    const list = $('bugs');
+    if (!bugs.reports.length) {
+      list.replaceChildren(el('li', { class: 'bug-empty', text: $('bug-status').value === 'new' ? 'No open reports. Nothing waiting on you.' : 'No reports here.' }));
+      return;
+    }
+    // A report being read stays open across a refresh.
+    const open = new Set([...list.querySelectorAll('details[open]')].map((d) => d.dataset.id));
+    list.replaceChildren(...bugs.reports.map((b) => {
+      const id = String(b.id);
+      const note = el('input', { type: 'text', maxlength: '500', placeholder: 'A note, e.g. fixed in 0.33.1', value: b.note || '', 'aria-label': 'Note' });
+      const mark = (status) => el('button', {
+        class: `btn btn-small ${status === 'fixed' ? 'btn-gold' : 'btn-ghost'}`,
+        type: 'button',
+        text: status === 'new' ? 'Reopen' : `Mark ${STATUS_WORDS[status].toLowerCase()}`,
+        onclick: async (event) => {
+          event.currentTarget.disabled = true;
+          try {
+            await rpc('mimir_admin_bug_mark', { p_id: b.id, p_status: status, p_note: note.value.trim() || null });
+            say($('bug-msg'), `Report ${id} marked ${STATUS_WORDS[status].toLowerCase()}.`);
+            await loadBugs();
+          } catch (err) {
+            if (err.status === 401) { onSessionLost(); return; }
+            say($('bug-msg'), `Could not mark it. ${rpcWords(err)}`, 'error');
+            event.currentTarget.disabled = false;
+          }
+        },
+      });
+      const repeat = num(b.occurrences) > 1 ? `seen ${intFmt.format(num(b.occurrences))} times` : null;
+      const meta = [`v${b.version}`, b.platform, b.edition === 'store' ? 'store edition' : null,
+        b.email || '(account gone)', repeat, ago(b.last_at)].filter(Boolean).join(' · ');
+      const details = el('details', { class: `bug bug-${b.status}`, 'data-id': id },
+        el('summary', null,
+          el('span', { class: `kind kind-${b.kind === 'auto' ? 'refund' : 'grant'}`, text: b.kind === 'auto' ? 'Auto' : 'Person' }),
+          el('span', { class: 'bug-summary', text: b.summary }),
+          el('span', { class: 'bug-meta', text: meta, title: `First ${fullDate(b.at)} · last ${fullDate(b.last_at)}` })),
+        el('pre', { class: 'bug-body', text: b.body || '(no body)' }),
+        el('div', { class: 'bug-actions' },
+          note,
+          ...['checked', 'fixed', 'ignored', 'new'].filter((s) => s !== b.status).map(mark)));
+      if (open.has(id)) details.open = true;
+      return el('li', null, details);
+    }));
+  };
+  $('bug-status').addEventListener('change', () => { bugs = null; loadBugs(); });
+  $('refresh').addEventListener('click', () => loadBugs());
 
   // ── A user's ledger ──────────────────────────────────────────────────────
   let ledgerUser = null;

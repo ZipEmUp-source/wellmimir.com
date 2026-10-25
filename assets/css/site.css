@@ -492,3 +492,19 @@ h1, h2, h3 { text-wrap: balance; }
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .js .reveal { opacity: 1; transform: none; }
 }
+
+/* Getting started (/start/) */
+.start h2 { display: flex; align-items: center; gap: 12px; scroll-margin-top: 96px; }
+.start-num {
+  flex: none; display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--gold-25); background: var(--gold-12); color: var(--gold-bright); font-size: 16px;
+}
+.start-toc { margin: 28px 0 8px; padding: 18px 22px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: rgba(13, 19, 28, 0.6); }
+.start-toc ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 32px; }
+.start-toc li { margin: 4px 0; break-inside: avoid; }
+.start-shot { margin: 22px 0 8px; }
+.start-shot:hover { transform: none; }
+.start-callout { padding: 16px 18px; border: 1px solid var(--teal-30); border-radius: var(--radius-sm); background: var(--teal-14); color: var(--text); }
+.start ol:not(.start-toc ol) { padding-left: 22px; }
+@media (max-width: 560px) { .start-toc ol { columns: 1; } }
+.start-shot.is-small { max-width: 560px; margin-inline: auto; }
