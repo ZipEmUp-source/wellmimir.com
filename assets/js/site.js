@@ -103,7 +103,7 @@
       name: data.name || data.tag_name,
       url: data.html_url,
       published: data.published_at,
-      assets: (data.assets || []).map(({ name, size, browser_download_url: href }) => ({ name, size, href })),
+      assets: (data.assets || []).map(({ name, size, browser_download_url: href, digest }) => ({ name, size, href, digest })),
     };
     writeCache(release);
     return release;
@@ -147,6 +147,24 @@
         node.textContent = `Latest: Mimir ${version}${saga ? ` “${saga}”` : ''}${date ? ` · ${date}` : ''}`;
       });
       document.querySelectorAll('[data-release-notes]').forEach((node) => { node.href = release.url; });
+    }
+
+    // Each installer's SHA-256 as GitHub recorded it on upload, to hold the file that arrived against.
+    const sums = document.querySelector('[data-checksums]');
+    const rows = [['windows', 'Windows'], ['mac-arm', 'Mac with Apple silicon'], ['mac-intel', 'Mac with Intel']]
+      .map(([key, label]) => [label, found[key]])
+      .filter(([, asset]) => asset && /^sha256:[0-9a-f]{64}$/.test(asset.digest || ''));
+    if (sums && rows.length) {
+      sums.querySelector('[data-checksum-list]').replaceChildren(...rows.flatMap(([label, asset]) => {
+        const term = document.createElement('dt');
+        term.textContent = `${label} · ${asset.name}`;
+        const value = document.createElement('dd');
+        const hash = document.createElement('code');
+        hash.textContent = asset.digest.slice('sha256:'.length);
+        value.append(hash);
+        return [term, value];
+      }));
+      sums.hidden = false;
     }
 
     // The main button: straight to the right file where we can tell, otherwise to the choices.

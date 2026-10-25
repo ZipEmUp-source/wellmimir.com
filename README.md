@@ -6,7 +6,12 @@ The website for Mimir. Plain HTML, CSS and a little JavaScript: no build step.
 - `assets/css/site.css` holds the look, in Mimir's own colours (midnight, teal and gold).
 - `assets/js/site.js` points every download button at the newest **published** release in
   [ZipEmUp-source/Mimir-releases](https://github.com/ZipEmUp-source/Mimir-releases), with its size and Norse name.
-  A draft release never shows here; publishing one updates the site by itself.
+  A draft release never shows here; publishing one updates the site by itself. "Check your download" under the buttons lists
+  each installer's SHA-256 from the same answer (GitHub's `digest` for the asset), so it never needs changing by hand.
+- `pair/` is the page desktop Mimir's phone-pairing QR opens (`assets/js/pair.js`). The address and code ride the link's
+  fragment, which the browser never sends anywhere, and leave the address bar as soon as they are read. GitHub Pages cannot
+  send headers (no CSP, HSTS or frame-ancestors), so the page refuses to show a code inside another site's frame and says
+  in plain words that the code is secret; a Content-Security-Policy in a meta tag lets it load only its own files and the fonts.
 - `developer/` is the credits monitor for Mimir's developers (`assets/js/developer.js`, `assets/css/developer.css`): sign in with an
   emailed code, then it reads the `mimir_admin_*` functions of the account service: credits, and the bug reports people and Mimir's error checker send
   (mark each checked, fixed or ignored). Its Messages panel writes free messages to one

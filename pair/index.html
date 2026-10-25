@@ -6,6 +6,8 @@
   <title>Pair your phone · Mimir</title>
   <meta name="description" content="Open a pairing link from desktop Mimir in the Mimir phone app.">
   <meta name="robots" content="noindex">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
   <meta name="theme-color" content="#090d13">
   <link rel="canonical" href="https://wellmimir.com/pair/">
 
@@ -31,7 +33,7 @@
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <svg class="svg-sprite" width="0" height="0" aria-hidden="true">
     <defs>
       <symbol id="logo" viewBox="0 0 64 64">
         <circle cx="32" cy="32" r="28" fill="none" stroke="#d9ad5c" stroke-width="2.4"/>
@@ -50,7 +52,7 @@
         <svg class="logo" aria-hidden="true"><use href="#logo"/></svg>
         <span class="brand-name">MIMIR</span>
       </a>
-      <a class="btn btn-gold btn-small" style="margin-left:auto" href="/#download">Download</a>
+      <a class="btn btn-gold btn-small nav-end" href="/#download">Download</a>
     </nav>
   </header>
 
@@ -59,18 +61,20 @@
       <span class="eyebrow">Pairing</span>
       <h1>Pair your phone</h1>
       <p id="pair-lede">Desktop Mimir sent you here to pair a phone. Open the link in the Mimir app you have.</p>
-      <div id="pair-actions" hidden style="flex-wrap:wrap;gap:12px;margin:24px 0">
+      <div id="pair-actions" class="pair-actions" hidden>
         <a class="btn btn-gold" id="open-store" href="#">Open in Mimir Mobile</a>
         <a class="btn btn-ghost" id="open-dev" href="#">Open in Mimir Dev</a>
       </div>
       <div id="pair-details" hidden>
         <h2>Or type it in</h2>
         <p>In the app: Settings → Desktop, then type this address and code.</p>
-        <p>Desktop address<br><strong id="pair-url" style="word-break:break-all"></strong></p>
-        <p>Pairing code<br><strong id="pair-code" style="font-size:1.4em;letter-spacing:0.12em"></strong></p>
+        <p>Desktop address<br><strong id="pair-url" class="pair-url"></strong></p>
+        <p>Pairing code<br><strong id="pair-code" class="pair-code"></strong></p>
         <p>The code works once and runs out ten minutes after your desktop showed it. Only pair with your own computer.</p>
+        <p><strong>Keep the code to yourself.</strong> Until it runs out, anyone who has it and can reach that address could pair a phone with your computer. It stays on this screen: it rides the part of the link after the #, which your browser never sends to this site or to anyone else. And this page only ever shows a code in a tab of its own, never inside another site's page: if you see one there, close it and make a fresh code on your computer.</p>
       </div>
       <p id="pair-missing" hidden>This link has no pairing code in it. On your computer, open Mimir → Settings → Phone, show a fresh code, and scan it again.</p>
+      <p id="pair-framed" hidden>This page shows pairing codes, so it does not open inside another site. Scan the QR code on your computer again with your phone's camera.</p>
     </article>
   </main>
 
@@ -92,23 +96,6 @@
       <p class="fine">© 2026 Mimir.</p>
     </div>
   </footer>
-  <script>
-    // The address and code ride the fragment (#url=…&code=…), which the browser never sends to this server.
-    (function () {
-      var params = new URLSearchParams(location.hash.slice(1));
-      var url = params.get('url') || '', code = (params.get('code') || '').toUpperCase();
-      var ok = false;
-      try { ok = new URL(url).protocol === 'https:' && /^[0-9A-Z-]{4,24}$/.test(code); } catch (e) { ok = false; }
-      if (!ok) { document.getElementById('pair-missing').hidden = false; return; }
-      var query = 'pair?url=' + encodeURIComponent(url) + '&code=' + encodeURIComponent(code);
-      document.getElementById('open-store').href = 'wellmimir://' + query;
-      document.getElementById('open-dev').href = 'mimir-mobile://' + query;
-      document.getElementById('pair-url').textContent = url;
-      document.getElementById('pair-code').textContent = code;
-      var actions = document.getElementById('pair-actions'); actions.hidden = false; actions.style.display = 'flex';
-      document.getElementById('pair-details').hidden = false;
-      history.replaceState(null, '', location.pathname);
-    })();
-  </script>
+  <script src="/assets/js/pair.js"></script>
 </body>
 </html>

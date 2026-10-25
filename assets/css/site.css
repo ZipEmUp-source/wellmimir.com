@@ -395,6 +395,14 @@ h1, h2, h3 { text-wrap: balance; }
 .download-notes p { margin: 0; }
 .version-line { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; color: var(--muted); font-size: 14px; }
 .version-line a { font-weight: 500; }
+.checksums { margin-top: 22px; color: var(--muted); font-size: 14px; }
+.checksums summary { cursor: pointer; color: var(--text-soft); font-weight: 500; }
+.checksums p { margin: 10px 0 0; }
+.checksums code { font: 13px var(--font-mono); color: var(--text-soft); }
+.checksums dl { margin: 10px 0 0; }
+.checksums dt { margin-top: 10px; color: var(--text-soft); }
+.checksums dd { margin: 2px 0 0; }
+.checksums dd code { color: var(--gold-bright); word-break: break-all; }
 
 /* FAQ */
 .faq { max-width: 820px; margin: 0 auto; display: grid; gap: 12px; }
@@ -455,6 +463,14 @@ h1, h2, h3 { text-wrap: balance; }
 .prose li { margin: 6px 0; }
 .prose .updated { color: var(--muted); font-size: 14px; }
 .prose code { font: 14px var(--font-mono); background: var(--panel-strong); padding: 2px 6px; border-radius: 6px; color: var(--text); }
+
+/* The pairing page: no inline styles, so its Content-Security-Policy needs no 'unsafe-inline'. */
+.svg-sprite { position: absolute; }
+.nav .nav-end { margin-left: auto; }
+.pair-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0; }
+.pair-actions[hidden] { display: none; }
+.pair-url { word-break: break-all; }
+.pair-code { font-size: 1.4em; letter-spacing: 0.12em; }
 
 /* ── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 1020px) {
