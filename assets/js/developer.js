@@ -396,7 +396,14 @@
   const enter = async () => {
     show('loading');
     try {
-      const status = await rpc('mimir_admin_status', {});
+      let status;
+      try {
+        status = await rpc('mimir_admin_status', {});
+      } catch (err) {
+        if (!isNotInstalled(err)) throw err;
+        // An account service from before the second lock: the list alone decides.
+        status = { admin: (await rpc('mimir_admin_check', {})) === true, mfa: true };
+      }
       if (!status || status.admin !== true) { showBlocked(...NOT_DEV); return; }
       if (status.mfa !== true) { await showMfa(status); return; }
     } catch (err) {
