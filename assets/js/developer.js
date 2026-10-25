@@ -1,7 +1,8 @@
 // wellmimir.com/developer: the Mimir credits monitor. Sign in with an emailed
 // code (Supabase Auth, the same account service Mimir uses), then read the
 // admin RPCs: totals, a 30-day chart, every user's balance and use, a user's
-// ledger, and a form that gives (or takes back) credits.
+// ledger, a form that gives (or takes back) credits, and messages: free words
+// to one user or to everyone, read and answered inside Mimir.
 //
 // Every node that shows data is built with createElement + textContent:
 // emails and notes are written by users, so nothing here uses innerHTML.
@@ -275,7 +276,9 @@
       } catch { /* the token is gone from this tab either way */ }
     }
     if ($('ledger').open) $('ledger').close();
+    if ($('convo').open) $('convo').close();
     data = null;
+    inbox = null;
     showSignIn();
     $('email').focus();
   };
@@ -331,6 +334,7 @@
       data = { overview: overview || {}, daily: Array.isArray(daily) ? daily : [], at: Date.now() };
       say($('dash-msg'), '');
       render();
+      loadInbox();
     } catch (err) {
       if (err.status === 401) { onSessionLost(); return; }
       if (isNotInstalled(err)) { showBlocked(...NOT_INSTALLED); return; }
@@ -564,6 +568,11 @@
   $('ledger-close').addEventListener('click', () => $('ledger').close());
   $('ledger').addEventListener('click', (event) => { if (event.target === $('ledger')) $('ledger').close(); });
   $('ledger').addEventListener('close', () => { ledgerUser = null; });
+  $('ledger-message').addEventListener('click', () => {
+    const u = ledgerUser;
+    $('ledger').close();
+    if (u) openConvo({ user_id: u.user_id, email: u.email });
+  });
   $('ledger-give').addEventListener('click', () => {
     const email = ledgerUser && ledgerUser.email;
     $('ledger').close();
@@ -571,6 +580,151 @@
     $('grant-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
     $('grant-amount').focus({ preventScroll: true });
   });
+
+  // ── Messages ─────────────────────────────────────────────────────────────
+  // Free, plain words between the developers and each account. Mimir shows
+  // them in Settings → Account (desktop) and Settings → Messages (phone).
+  const MAX_MESSAGE = 4000;
+  let inbox = null; // { threads, broadcasts, unread }
+  let inboxMissing = false;
+  const loadInbox = async () => {
+    if (!session) return;
+    try {
+      const r = await rpc('mimir_admin_inbox', {});
+      inbox = { threads: Array.isArray(r && r.threads) ? r.threads : [], broadcasts: Array.isArray(r && r.broadcasts) ? r.broadcasts : [], unread: num(r && r.unread) };
+      inboxMissing = false;
+      say($('msg-msg'), '');
+    } catch (err) {
+      if (err.status === 401) { onSessionLost(); return; }
+      if (isNotInstalled(err)) { inboxMissing = true; inbox = null; }
+      else say($('msg-msg'), `Could not load the messages. ${rpcWords(err)}`, 'error');
+    }
+    renderInbox();
+  };
+  const renderInbox = () => {
+    $('msg-everyone').disabled = inboxMissing;
+    if (inboxMissing) {
+      $('msg-unread').textContent = '';
+      $('threads').replaceChildren(el('li', { class: 'empty', text: 'Messages are not installed on the account service yet: run the newest supabase/schema.sql there.' }));
+      $('broadcasts-box').hidden = true;
+      return;
+    }
+    if (!inbox) return;
+    $('msg-unread').textContent = inbox.unread ? `${intFmt.format(inbox.unread)} unread` : '';
+    if (!inbox.threads.length) {
+      $('threads').replaceChildren(el('li', { class: 'empty', text: 'No conversations yet. Write to someone from the users table, or to everyone.' }));
+    } else {
+      $('threads').replaceChildren(...inbox.threads.map((t) => {
+        const unread = num(t.unread);
+        return el('li', null, el('button', { class: `thread-row${unread ? ' is-unread' : ''}`, type: 'button', onclick: () => openConvo(t) },
+          el('span', { class: 'thread-email' }, t.email || '(no email)', unread ? el('span', { class: 'thread-badge', text: `${unread} new` }) : null),
+          el('span', { class: 'thread-when', text: ago(t.last_at), title: fullDate(t.last_at) || null }),
+          el('span', { class: 'thread-last', text: `${t.last_from_dev ? 'You: ' : ''}${t.last_body || ''}` })));
+      }));
+    }
+    $('broadcasts-box').hidden = !inbox.broadcasts.length;
+    $('broadcasts').replaceChildren(...inbox.broadcasts.map((b) => el('li', null,
+      el('p', { text: b.body || '' }),
+      el('small', { text: `${ago(b.at)} · read by ${intFmt.format(num(b.read))} of ${intFmt.format(num(b.recipients))}`, title: fullDate(b.at) || null }))));
+  };
+
+  // The conversation dialog: one account's thread, or a message to everyone.
+  let convoWith = null; // { user_id, email } or 'everyone'
+  const convoItem = (m) => el('li', { class: `convo-item ${m.from_dev ? 'is-dev' : 'is-user'}` },
+    el('span', { class: 'convo-who', text: m.from_dev ? (m.to_all ? 'You · to everyone' : 'You') : 'They wrote' }),
+    el('p', { class: 'convo-body', text: m.body || '' }),
+    el('span', { class: 'convo-when', title: fullDate(m.at) || null,
+      text: ago(m.at) + (m.from_dev ? (m.read_at ? ' · read' : ' · not read yet') : '') }));
+  const showConvo = (messages) => {
+    const list = $('convo-list');
+    list.replaceChildren(...(messages.length ? messages.map(convoItem) : [el('li', { class: 'empty', text: 'Nothing yet. Say hello.' })]));
+    list.scrollTop = list.scrollHeight;
+  };
+  const countConvo = () => { $('convo-count').textContent = `${intFmt.format($('convo-text').value.length)} / ${intFmt.format(MAX_MESSAGE)}`; };
+  const hideConvoConfirm = () => { $('convo-confirm').hidden = true; busy($('convo-form'), false); };
+  const openConvo = async (who) => {
+    convoWith = who;
+    const everyone = who === 'everyone';
+    const dlg = $('convo');
+    dlg.classList.toggle('is-everyone', everyone);
+    $('convo-kicker').textContent = everyone ? 'Message' : 'Conversation';
+    $('convo-title').textContent = everyone ? 'Everyone with a Mimir account' : (who.email || '(no email)');
+    $('convo-text').value = '';
+    $('convo-text').placeholder = everyone ? 'Write to everyone…' : 'Write a message…';
+    countConvo();
+    hideConvoConfirm();
+    say($('convo-msg'), everyone ? 'Everyone sees it in Mimir, and each answer comes back here as a conversation of its own.' : 'Loading…');
+    $('convo-list').replaceChildren();
+    if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
+    $('convo-text').focus();
+    if (everyone) return;
+    try {
+      const r = await rpc('mimir_admin_thread', { p_user: who.user_id });
+      if (convoWith !== who) return;
+      say($('convo-msg'), '');
+      showConvo(Array.isArray(r && r.messages) ? r.messages : []);
+      loadInbox(); // reading marked their words read
+    } catch (err) {
+      if (convoWith !== who) return;
+      if (err.status === 401) { dlg.close(); onSessionLost(); return; }
+      say($('convo-msg'), isNotInstalled(err) ? 'Messages are not installed on the account service yet.' : `Could not load the conversation. ${rpcWords(err)}`, 'error');
+    }
+  };
+  const sendConvo = async () => {
+    const who = convoWith;
+    const body = $('convo-text').value.trim();
+    busy($('convo-form'), true);
+    $('convo-yes').disabled = true;
+    $('convo-no').disabled = true;
+    say($('convo-msg'), 'Sending…');
+    try {
+      const r = await rpc('mimir_admin_send', { p_user: who === 'everyone' ? null : who.user_id, p_body: body });
+      $('convo-text').value = '';
+      countConvo();
+      if (who === 'everyone') {
+        say($('convo-msg'), `Sent to ${intFmt.format(num(r && r.sent))} account${num(r && r.sent) === 1 ? '' : 's'}.`, 'ok');
+      } else {
+        say($('convo-msg'), 'Sent. They see it the next time Mimir looks, within a few minutes.', 'ok');
+        const t = await rpc('mimir_admin_thread', { p_user: who.user_id });
+        if (convoWith === who) showConvo(Array.isArray(t && t.messages) ? t.messages : []);
+      }
+      loadInbox();
+    } catch (err) {
+      if (err.status === 401) { $('convo').close(); onSessionLost(); return; }
+      say($('convo-msg'), `Not sent. ${isNotInstalled(err) ? 'Messages are not installed on the account service yet.' : rpcWords(err)}`, 'error');
+    } finally {
+      $('convo-yes').disabled = false;
+      $('convo-no').disabled = false;
+      hideConvoConfirm();
+      $('convo-text').focus();
+    }
+  };
+  $('convo-text').addEventListener('input', countConvo);
+  $('convo-text').addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) { event.preventDefault(); $('convo-form').requestSubmit(); }
+  });
+  $('convo-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const body = $('convo-text').value.trim();
+    if (!body) { say($('convo-msg'), 'Write something first.', 'error'); return; }
+    if (body.length > MAX_MESSAGE) { say($('convo-msg'), `That is longer than ${intFmt.format(MAX_MESSAGE)} characters.`, 'error'); return; }
+    if (convoWith === 'everyone') {
+      const users = data && data.overview && data.overview.totals ? Math.max(0, num(data.overview.totals.users) - 1) : 0;
+      $('convo-question').textContent = `Send this to every Mimir account${users ? ` (${intFmt.format(users)} people)` : ''}? It cannot be taken back.`;
+      say($('convo-msg'), '');
+      busy($('convo-form'), true);
+      $('convo-confirm').hidden = false;
+      $('convo-yes').focus();
+      return;
+    }
+    sendConvo();
+  });
+  $('convo-yes').addEventListener('click', () => sendConvo());
+  $('convo-no').addEventListener('click', () => { hideConvoConfirm(); $('convo-text').focus(); });
+  $('convo-close').addEventListener('click', () => $('convo').close());
+  $('convo').addEventListener('click', (event) => { if (event.target === $('convo')) $('convo').close(); });
+  $('convo').addEventListener('close', () => { convoWith = null; });
+  $('msg-everyone').addEventListener('click', () => openConvo('everyone'));
 
   // ── Give credits ─────────────────────────────────────────────────────────
   let pendingGrant = null;

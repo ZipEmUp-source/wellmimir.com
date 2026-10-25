@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Developers · Mimir</title>
-  <meta name="description" content="Mimir credits monitor, for Mimir's developers.">
+  <meta name="description" content="Mimir credits monitor and messages, for Mimir's developers.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="referrer" content="no-referrer">
   <meta name="theme-color" content="#090d13">
@@ -140,6 +140,20 @@
           <p class="dev-note">A green dot means a turn in the last 24 hours. Pick a user to see their ledger.</p>
         </div>
 
+        <div class="dev-panel" id="messages-panel">
+          <div class="panel-head">
+            <h2>Messages <span class="count" id="msg-unread"></span></h2>
+            <button class="btn btn-ghost btn-small" type="button" id="msg-everyone">Write to everyone</button>
+          </div>
+          <p class="dev-msg" id="msg-msg" role="status" aria-live="polite"></p>
+          <ul class="threads" id="threads" aria-label="Conversations"></ul>
+          <div class="broadcasts" id="broadcasts-box" hidden>
+            <h3 class="sub-head">Sent to everyone</h3>
+            <ul class="broadcasts-list" id="broadcasts"></ul>
+          </div>
+          <p class="dev-note">Free messages, no credits used. People read and answer them in Mimir: Settings → Account on the desktop, Settings → Messages on the phone. Pick a user in the table, or a conversation here, to write to one person.</p>
+        </div>
+
         <div class="dev-panel" id="grant-panel">
           <div class="panel-head"><h2>Give credits</h2></div>
           <form id="grant-form" class="grant-form" novalidate>
@@ -200,7 +214,35 @@
     </div>
     <div class="dev-actions ledger-foot">
       <button class="btn btn-gold btn-small" type="button" id="ledger-give">Give credits to this user</button>
+      <button class="btn btn-ghost btn-small" type="button" id="ledger-message">Message this user</button>
     </div>
+  </dialog>
+
+  <dialog class="ledger convo" id="convo" aria-labelledby="convo-title">
+    <div class="ledger-head">
+      <div>
+        <span class="ledger-kicker" id="convo-kicker">Conversation</span>
+        <h2 id="convo-title"></h2>
+      </div>
+      <button class="btn btn-ghost btn-small" type="button" id="convo-close">Close</button>
+    </div>
+    <ol class="convo-list" id="convo-list" aria-label="Messages"></ol>
+    <form class="convo-form" id="convo-form" novalidate>
+      <label class="sr-only" for="convo-text">Message</label>
+      <textarea id="convo-text" rows="4" maxlength="4000" placeholder="Write a message…"></textarea>
+      <div class="convo-tools">
+        <span class="dev-note" id="convo-count">0 / 4,000</span>
+        <button class="btn btn-gold btn-small" type="submit" id="convo-send">Send</button>
+      </div>
+    </form>
+    <div class="confirm" id="convo-confirm" hidden>
+      <p id="convo-question"></p>
+      <div class="dev-actions">
+        <button class="btn btn-gold btn-small" type="button" id="convo-yes">Yes, send to everyone</button>
+        <button class="btn btn-ghost btn-small" type="button" id="convo-no">Cancel</button>
+      </div>
+    </div>
+    <p class="dev-msg" id="convo-msg" role="status" aria-live="polite"></p>
   </dialog>
 
   <footer class="site-footer">
